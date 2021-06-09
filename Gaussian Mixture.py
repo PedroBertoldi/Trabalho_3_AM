@@ -1,6 +1,6 @@
 from typing import List
 from numpy.ma import count
-from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
 import Data2
 import os
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ def run():
         count += 1
         
         #============================================================================================
-        labels = KMeans(n_clusters=param["n_clusters"]).fit_predict(X)
+        labels = GaussianMixture(n_components=param["n_clusters"]).fit_predict(X)
         #============================================================================================
 
         number_of_colors = len(list(set(labels)))

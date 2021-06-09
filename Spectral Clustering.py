@@ -1,6 +1,6 @@
 from typing import List
 from numpy.ma import count
-from sklearn.cluster import KMeans
+from sklearn.cluster import SpectralClustering
 import Data2
 import os
 import matplotlib.pyplot as plt
@@ -17,9 +17,12 @@ def GetModelName():
 def run():
     X,y = Data2.GetData()
     #==============================================================================================
-    params = [{"n_clusters" : 9},
-              {"n_clusters" : 18},
-              {"n_clusters" : 27},]
+    params = [{"n_clusters" : 9 , "n_neighbors" : 10},
+              {"n_clusters" : 18, "n_neighbors" : 10},
+              {"n_clusters" : 27, "n_neighbors" : 10},
+              {"n_clusters" : 18, "n_neighbors" : 5},
+              {"n_clusters" : 18, "n_neighbors" : 20},
+              {"n_clusters" : 18, "n_neighbors" : 50},]
     #===============================================================================================
     count = 0
     name = GetModelName()
@@ -29,7 +32,7 @@ def run():
         count += 1
         
         #============================================================================================
-        labels = KMeans(n_clusters=param["n_clusters"]).fit_predict(X)
+        labels = SpectralClustering(n_clusters=18,assign_labels='discretize',affinity="nearest_neighbors",n_neighbors=param["n_neighbors"]).fit_predict(X)
         #============================================================================================
 
         number_of_colors = len(list(set(labels)))

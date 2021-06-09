@@ -1,6 +1,6 @@
 from typing import List
 from numpy.ma import count
-from sklearn.cluster import KMeans
+from sklearn.cluster import MeanShift
 import Data2
 import os
 import matplotlib.pyplot as plt
@@ -17,9 +17,9 @@ def GetModelName():
 def run():
     X,y = Data2.GetData()
     #==============================================================================================
-    params = [{"n_clusters" : 9},
-              {"n_clusters" : 18},
-              {"n_clusters" : 27},]
+    params = [{"bandwidth" : 9},
+              {"bandwidth" : 18},
+              {"bandwidth" : 27},]
     #===============================================================================================
     count = 0
     name = GetModelName()
@@ -29,7 +29,7 @@ def run():
         count += 1
         
         #============================================================================================
-        labels = KMeans(n_clusters=param["n_clusters"]).fit_predict(X)
+        labels = MeanShift(bandwidth=param["bandwidth"]).fit_predict(X)
         #============================================================================================
 
         number_of_colors = len(list(set(labels)))

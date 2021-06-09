@@ -1,6 +1,6 @@
 from typing import List
 from numpy.ma import count
-from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
 import Data2
 import os
 import matplotlib.pyplot as plt
@@ -17,9 +17,11 @@ def GetModelName():
 def run():
     X,y = Data2.GetData()
     #==============================================================================================
-    params = [{"n_clusters" : 9},
-              {"n_clusters" : 18},
-              {"n_clusters" : 27},]
+    params = [{"leaf_size" : 30 , "eps" : 3 , "min_samples":5},
+              {"leaf_size" : 30 , "eps" : 5 , "min_samples":5},
+              {"leaf_size" : 30 , "eps" : 20 , "min_samples":5},
+              {"leaf_size" : 30 , "eps" : 20 , "min_samples":10},
+              {"leaf_size" : 30 , "eps" : 20 , "min_samples":15},]
     #===============================================================================================
     count = 0
     name = GetModelName()
@@ -29,7 +31,7 @@ def run():
         count += 1
         
         #============================================================================================
-        labels = KMeans(n_clusters=param["n_clusters"]).fit_predict(X)
+        labels = DBSCAN(leaf_size=param["leaf_size"],eps=param["eps"],min_samples=param["min_samples"]).fit_predict(X)
         #============================================================================================
 
         number_of_colors = len(list(set(labels)))
@@ -49,7 +51,7 @@ def run():
         first_note = ""
         for key in param.keys():
             first_note += str(key) + ": " + str(param[key]) + "\n"
-        plt.figtext(x=0.01,y=0.95,s=first_note)
+        plt.figtext(x=0.01,y=0.9,s=first_note)
         note = "Davies Bouldin Score: " + str(davies_bouldin_score(X,labels)) + "\n"
         note += "Silhouette Score: " + str(silhouette_score(X,labels)) + "\n"
         note += "Mutual Score: " + str(mutual_info_score(y,labels)) + "\n"
